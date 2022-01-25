@@ -1,2 +1,6 @@
-.vscode
-.log
+*
+
+!.gitignore
+!.import.sh
+!_config.sh
+!ds.py

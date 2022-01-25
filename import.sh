@@ -1,8 +1,23 @@
 
-PY="python"
+#-------------------------------------------------------------------------------
+# Setup
 
 # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+source "${SCRIPT_DIR}/_config.sh"
+
+if [[ -f "${SCRIPT_DIR}/config.sh" ]]; then
+    source "${SCRIPT_DIR}/config.sh"
+fi
+
+if [[ -n ${LOCAL_SCRIPT_FILES+x} ]]; then
+    for local_script in ${LOCAL_SCRIPT_FILES[@]}; do
+        source "${SCRIPT_DIR}/${local_script}"
+    done
+fi
+
+#-------------------------------------------------------------------------------
 
 bashrc() {
     if [ "$1" == "-a" ];
@@ -13,6 +28,7 @@ bashrc() {
     fi
 }
 
+
 scripts() {
     if [ "$1" == "-a" ];
     then
@@ -21,6 +37,7 @@ scripts() {
         code -n --wait "$SCRIPT_DIR" && source "$HOME/.bashrc"
     fi
 }
+
 
 reload() {
     source "$HOME/.bashrc"
@@ -68,13 +85,28 @@ gtree() {
 
 
 #------------------------------------------------------------------------
+# Mark Text
+md() {
+    if [[ ! -f "${MARK_TEXT_PATH}" ]]; then
+        echo "Invalid MARK_TEXT_PATH: '${MARK_TEXT_PATH}'"
+        return
+    fi
+
+    start "" "$MARK_TEXT_PATH" "$@"
+}
+
+#------------------------------------------------------------------------
 # Typora
 
 typo() {
-    TYPO="C:\Program Files\Typora\Typora.exe"
+    if [[ ! -f "$TYPORA_PATH" ]]; then
+        echo "Invalid TYPORA_PATH: '${TYPORA_PATH}'"
+        return
+    fi
+
     if [ $# -eq 0 ]
     then
-        start "" "$TYPO" ""
+        start "" "${TYPORA_PATH}" ""
     else
         fullpath=$(realpath "$1")
         # Converts posix path to windows path, because 'start' starts a cmd process
@@ -93,15 +125,20 @@ typo() {
             fi
             
         fi
-        start "" "$TYPO" "$FILE"
+        start "" "${TYPORA_PATH}" "$FILE"
     fi
 }
 
 
 ds () {
+
+    if [[ ! -f "${PYTHON_PATH}" ]]; then
+        echo "Invalid PYTHON_PATH: '${PYTHON_PATH}'"
+        return
+    fi
     
     # We cannot 'cd' in the Python script, so we return the directory from the script, and 'cd' here
-    dir=$($PY ${SCRIPT_DIR}/ds.py "$@")
+    dir=$("$PYTHON_PATH" ${SCRIPT_DIR}/ds.py "$@")
     if [ $? -eq 0 ]; then
         cd "${dir}"
         return
@@ -111,5 +148,9 @@ ds () {
 
 
 draw() {
-    start "" "C:\Program Files\draw.io\draw.io.exe" "$@"
+    if [[ ! -f "${DRAW_IO_PATH}" ]]; then
+        echo "Invalid DRAW_IO_PATH: '${DRAW_IO_PATH}'"
+        return
+    fi
+    start "" "${DRAW_IO_PATH}" "$@"
 }
