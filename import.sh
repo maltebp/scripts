@@ -154,3 +154,34 @@ draw() {
     fi
     start "" "${DRAW_IO_PATH}" "$@"
 }
+
+
+vs() {
+    if [[ ! -f "${VISUAL_STUDIO_PATH}" ]]; then
+        echo "Invalid VISUAL_STUDIO_PATH: '${VISUAL_STUDIO_PATH}'"
+        return
+    fi
+
+    if [[ $# -eq 0 ]]; then
+        start "" "${VISUAL_STUDIO_PATH}"
+    fi
+
+    if [[ -d "$1" ]]; then
+        # Get name of first .sln file in directory
+        solution="$(ls "$1" | grep ".sln" | head -n1)"
+        
+        if [[ -z "${solution}" ]]; then
+            echo "Error: no .sln file in directory '$1'"
+            return
+        fi
+
+        start "" "${VISUAL_STUDIO_PATH}" "$1/${solution}"
+        return
+    fi
+
+    if [[ -f "$1" ]]; then
+        start "" "${VISUAL_STUDIO_PATH}" "$1"
+    else
+        echo "Error: cannot find solution '$1'"
+    fi
+}
