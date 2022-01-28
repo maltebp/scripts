@@ -92,7 +92,28 @@ md() {
         return
     fi
 
-    start "" "$MARK_TEXT_PATH" "$@"
+    if [ $# -eq 0 ]
+    then
+        start "" "${MARK_TEXT_PATH}" ""
+    else
+        fullpath=$(realpath "$1")
+        # Converts posix path to windows path, because 'start' starts a cmd process
+        # The first -e block replaces drive (/x/... to x:\...) if it exists, and
+        # second replaces remaining forwardslashes
+        FILE=$( echo "$fullpath" | sed -e 's|^\/\([a-zA-Z]\)\/|\1:\\|' -e 's|\/|\\|g')
+        if [ ! -f "$FILE" ]; then
+            read -p "$1 not found - create it? [y/n] " -n 1 -r
+            echo    # (optional) move to a new line
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                echo "Creating new file"
+                touch "$FILE"
+            else
+                return
+            fi
+            
+        fi
+        start "" "${MARK_TEXT_PATH}" "${FILE}"
+    fi
 }
 
 #------------------------------------------------------------------------
