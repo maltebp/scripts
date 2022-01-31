@@ -1,21 +1,17 @@
 
-#-------------------------------------------------------------------------------
-# Setup
-
 # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+#-------------------------------------------------------------------------------
+# Loading config files
+
+# Load the default one to reset the variables
 source "${SCRIPT_DIR}/_config.sh"
 
 if [[ -f "${SCRIPT_DIR}/config.sh" ]]; then
     source "${SCRIPT_DIR}/config.sh"
 fi
 
-if [[ -n ${LOCAL_SCRIPT_FILES+x} ]]; then
-    for local_script in ${LOCAL_SCRIPT_FILES[@]}; do
-        source "${SCRIPT_DIR}/${local_script}"
-    done
-fi
 
 #-------------------------------------------------------------------------------
 
@@ -43,7 +39,7 @@ reload() {
     source "$HOME/.bashrc"
 }
 
-#------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Git stuff
 
 gupdate() {
@@ -84,7 +80,13 @@ gtree() {
 }
 
 
-#------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+mcd() {
+    mkdir "$1" && cd "$1"
+}
+
+
+#-------------------------------------------------------------------------------
 # Mark Text
 md() {
     if [[ ! -f "${MARK_TEXT_PATH}" ]]; then
@@ -97,9 +99,9 @@ md() {
         start "" "${MARK_TEXT_PATH}" ""
     else
         fullpath=$(realpath "$1")
-        # Converts posix path to windows path, because 'start' starts a cmd process
-        # The first -e block replaces drive (/x/... to x:\...) if it exists, and
-        # second replaces remaining forwardslashes
+        # Converts posix path to windows path, because 'start' starts a cmd
+        # process. The first -e block replaces drive (/x/... to x:\...) if it
+        # exists, and second replaces remaining forwardslashes
         FILE=$( echo "$fullpath" | sed -e 's|^\/\([a-zA-Z]\)\/|\1:\\|' -e 's|\/|\\|g')
         if [ ! -f "$FILE" ]; then
             read -p "$1 not found - create it? [y/n] " -n 1 -r
@@ -116,7 +118,7 @@ md() {
     fi
 }
 
-#------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Typora
 
 typo() {
@@ -130,9 +132,9 @@ typo() {
         start "" "${TYPORA_PATH}" ""
     else
         fullpath=$(realpath "$1")
-        # Converts posix path to windows path, because 'start' starts a cmd process
-        # The first -e block replaces drive (/x/... to x:\...) if it exists, and
-        # second replaces remaining forwardslashes
+        # Converts posix path to windows path, because 'start' starts a cmd'
+        # process The first -e block replaces drive (/x/... to x:\...) if it
+        # exists, and second replaces remaining forwardslashes
         FILE=$( echo "$fullpath" | sed -e 's|^\/\([a-zA-Z]\)\/|\1:\\|' -e 's|\/|\\|g')
         if [ ! -f "$FILE" ]; then
             read -p "$1 not found - create it? [y/n] " -n 1 -r
@@ -158,7 +160,8 @@ ds () {
         return
     fi
     
-    # We cannot 'cd' in the Python script, so we return the directory from the script, and 'cd' here
+    # We cannot 'cd' in the Python script, so we return the directory from the
+    # script, and 'cd' here
     dir=$("$PYTHON_PATH" ${SCRIPT_DIR}/ds.py "$@")
     if [ $? -eq 0 ]; then
         cd "${dir}"
@@ -174,6 +177,11 @@ draw() {
         return
     fi
     start "" "${DRAW_IO_PATH}" "$@"
+}
+
+
+msbuild() {
+    "${MSBUILD_PATH}" "$@"
 }
 
 
@@ -206,3 +214,18 @@ vs() {
         echo "Error: cannot find solution '$1'"
     fi
 }
+
+
+pdf() {
+    "${PDF_READER_PATH}" "$@"
+}
+
+
+#-------------------------------------------------------------------------------
+# Loading local scripts last, so that I may override global scripts on the local
+# machine
+if [[ -n ${LOCAL_SCRIPT_FILES+x} ]]; then
+    for local_script in ${LOCAL_SCRIPT_FILES[@]}; do
+        source "${SCRIPT_DIR}/${local_script}"
+    done
+fi
