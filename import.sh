@@ -181,6 +181,10 @@ draw() {
 
 
 msbuild() {
+    if [[ ! -f "${MSBUILD_PATH}" ]]; then
+        echo "Invalid MSBUILD_PATH: '${MSBUILD_PATH}'"
+        return
+    fi
     "${MSBUILD_PATH}" "$@"
 }
 
@@ -217,6 +221,10 @@ vs() {
 
 
 pdf() {
+    if [[ ! -f "${PDF_READER_PATH}" ]]; then
+        echo "Invalid PDF_READER_PATH: '${PDF_READER_PATH}'"
+        return
+    fi
     "${PDF_READER_PATH}" "$@"
 }
 
