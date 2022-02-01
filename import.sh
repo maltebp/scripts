@@ -217,7 +217,11 @@ vs() {
 
 
 pdf() {
-    "${PDF_READER_PATH}" "$@"
+    if [[ $# -eq 0 ]]; then
+        start "" "${PDF_READER_PATH}"
+    else
+        start "" "${PDF_READER_PATH}" "$@"
+    fi
 }
 
 
