@@ -133,7 +133,8 @@ typo() {
         # process The first -e block replaces drive (/x/... to x:\...) if it
         # exists, and second replaces remaining forwardslashes
         FILE=$( echo "$fullpath" | sed -e 's|^\/\([a-zA-Z]\)\/|\1:\\|' -e 's|\/|\\|g')
-        if [ ! -f "$FILE" ]; then
+
+        if [ ! -e "$FILE" ]; then
             read -p "$1 not found - create it? [y/n] " -n 1 -r
             echo    # (optional) move to a new line
             if [[ $REPLY =~ ^[Yy]$ ]]
@@ -233,6 +234,7 @@ pdf() {
 #-------------------------------------------------------------------------------
 # Loading local scripts last, so that I may override global scripts on the local
 # machine
+
 if [[ -n ${LOCAL_SCRIPT_FILES+x} ]]; then
     for local_script in ${LOCAL_SCRIPT_FILES[@]}; do
         source "${SCRIPT_DIR}/${local_script}"
