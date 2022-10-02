@@ -74,9 +74,12 @@ def delete_shortcuts(names):
     for name in names:
         if not name in shortcuts:
             print(f"No shortcut named '{name}' exists") 
+            continue
         dir = shortcuts[name]
         del shortcuts[name]
         print(f"Deleted shortcut '{name}' (it was mapped to '{dir}')")
+    
+    store_shortcuts(shortcuts)
 
 
 def use_shortcut(name: str):
