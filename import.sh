@@ -43,7 +43,7 @@ reload() {
 # Git stuff
 
 gupdate() {
-    git rm -r --cached . && git add .
+    git rm -r --cached '*' && git add -A
 }
 
 
@@ -184,6 +184,15 @@ msbuild() {
         return
     fi
     "${MSBUILD_PATH}" "$@"
+}
+
+
+mstest() {
+    if [[ ! -f "${MSTEST_PATH}" ]]; then
+        echo "Invalid MSTEST_PATH: '${MSTEST_PATH}'"
+        return
+    fi
+    "${MSTEST_PATH}" "$@"
 }
 
 
