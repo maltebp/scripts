@@ -12,8 +12,13 @@ if [[ -f "${SCRIPT_DIR}/config.sh" ]]; then
     source "${SCRIPT_DIR}/config.sh"
 fi
 
-
 #-------------------------------------------------------------------------------
+
+startssh() {
+    eval "$(ssh-agent -s)"
+    ssh-add "${SSH_KEY}"
+}
+
 
 bashrc() {
     if [ "$1" == "-a" ];
