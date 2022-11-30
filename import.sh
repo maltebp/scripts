@@ -12,6 +12,14 @@ if [[ -f "${SCRIPT_DIR}/config.sh" ]]; then
     source "${SCRIPT_DIR}/config.sh"
 fi
 
+runpython() {
+    if [[ ! -f "${PYTHON_PATH}" ]]; then
+        echo "Invalid PYTHON_PATH: '${PYTHON_PATH}'"
+        return
+    fi
+    "$PYTHON_PATH" "$@"
+}
+
 #-------------------------------------------------------------------------------
 
 startssh() {
@@ -38,7 +46,6 @@ scripts() {
         code -n --wait "$SCRIPT_DIR" && source "$HOME/.bashrc"
     fi
 }
-
 
 reload() {
     source "$HOME/.bashrc"
@@ -156,16 +163,28 @@ typo() {
 }
 
 
-ds () {
-
-    if [[ ! -f "${PYTHON_PATH}" ]]; then
-        echo "Invalid PYTHON_PATH: '${PYTHON_PATH}'"
+note() {
+    if [[ ! -f "$NOTE_PATH" ]]; then
+        echo "Invalid NOTE_PATH: '${NOTE_PATH}'"
         return
     fi
-    
+
+    if [[ ! -f "$TYPORA_PATH" ]]; then
+        echo "Invalid TYPORA_PATH: '${TYPORA_PATH}'"
+        return
+    fi
+
+    typo "${NOTE_PATH}"
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+ds() {
     # We cannot 'cd' in the Python script, so we return the directory from the
     # script, and 'cd' here
-    dir=$("$PYTHON_PATH" ${SCRIPT_DIR}/ds.py "$@")
+    dir=$(runpython ${SCRIPT_DIR}/ds.py "$@")
     if [ $? -eq 0 ]; then
         cd "${dir}"
         return
@@ -244,6 +263,18 @@ pdf() {
     fi
 }
 
+
+sub() {
+    if [[ ! -f "${SUBLIME_TEXT_PATH}" ]]; then
+        echo "Invalid SUBLIME_TEXT_PATH: '${SUBLIME_TEXT_PATH}'"
+        return
+    fi
+    if [[ $# -eq 0 ]]; then
+        start "" "${SUBLIME_TEXT_PATH}"
+    else
+        start "" "${SUBLIME_TEXT_PATH}" "$@"
+    fi
+}
 
 #-------------------------------------------------------------------------------
 # Loading local scripts last, so that I may override global scripts on the local
