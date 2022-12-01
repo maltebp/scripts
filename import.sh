@@ -162,6 +162,23 @@ typo() {
     fi
 }
 
+# ------------------------------------------------------------------------------
+unity() {
+    if [[ ! -f "$UNITY_PATH" ]]; then
+        echo "Invalid UNITY_PATH: '${UNITY_PATH}'"
+        return
+    fi
+
+    if [ $# -eq 0 ]
+    then
+        start "" "${UNITY_PATH}"
+    else
+        start "" "${UNITY_PATH}" "-projectPath" "."
+    fi
+}
+
+
+# ------------------------------------------------------------------------------
 
 note() {
     if [[ ! -f "$NOTE_PATH" ]]; then
