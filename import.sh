@@ -51,6 +51,7 @@ reload() {
     source "$HOME/.bashrc"
 }
 
+
 #-------------------------------------------------------------------------------
 # Git stuff
 
@@ -194,6 +195,14 @@ note() {
     typo "${NOTE_PATH}"
 }
 
+todo() {
+    if [[ ! -f "${TODO_PATH}" ]]; then
+        echo "Invalid TODO_PATH: '${TODO_PATH}'"
+        return
+    fi
+
+    code "${TODO_PATH}"
+}
 
 # ------------------------------------------------------------------------------
 
