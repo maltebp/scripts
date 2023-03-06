@@ -94,6 +94,43 @@ gtree() {
 
 
 #-------------------------------------------------------------------------------
+to_windows_path() {
+    if [ ! $# -eq 1 ]; then
+        return -1
+    fi
+
+    bashpath="$1"
+
+    # Converts posix path to windows path, because 'start' starts a cmd'
+    # process The first -e block replaces drive (/x/... to x:\...) if it
+    # exists, and second replaces remaining forwardslashes
+    windowspath=$( echo "$bashpath" | sed -e 's|^\/\([a-zA-Z]\)\/|\1:\\|' -e 's|\/|\\|g')
+    echo "$windowspath"
+}
+
+copypath() {
+    unset p
+
+    if [ $# -eq 0 ]; then
+        p=$(pwd -W)
+    elif [ -f "$1" ]; then
+        realfile=$(realpath "$1")
+        p=$(to_windows_path "$realfile")
+        echo $p
+    elif [ -d "$1" ]; then
+        realdir=$(realpath "$1")
+        p=$(to_windows_path "$realdir")
+    else
+        echo "Unknown file or directory '$1'"
+        return -1;
+    fi
+
+    if [[ -n "$p" ]]; then
+        echo "$p" | clip
+        echo "Copied '$p' to clipboard"
+    fi
+}
+
 mcd() {
     mkdir "$1" && cd "$1"
 }
