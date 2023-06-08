@@ -1,6 +1,2 @@
-*
-
-!.gitignore
-!.import.sh
-!_config.sh
-!ds.py
+config.sh
+config.cmd

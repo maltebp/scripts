@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -233,12 +234,12 @@ note() {
 }
 
 todo() {
-    if [[ ! -f "${TODO_PATH}" ]]; then
+    if [[ -f "${TODO_PATH}" || -d "${TODO_PATH}" ]]
+    then
+        code "${TODO_PATH}"
+    else
         echo "Invalid TODO_PATH: '${TODO_PATH}'"
-        return
-    fi
-
-    code "${TODO_PATH}"
+    fi    
 }
 
 # ------------------------------------------------------------------------------
