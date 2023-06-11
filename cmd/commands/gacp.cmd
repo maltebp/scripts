@@ -1,4 +1,4 @@
-:: @echo off
+@echo off
 
 if "%~1"=="" (
     git add -A && git commit && git push
