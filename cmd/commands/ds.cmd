@@ -14,7 +14,7 @@ set ds_temp_file=%ds_temp_dir%ds_bat_output.tmp
 
 if %errorlevel% NEQ 0 goto:err
 set /p ds_target=<%ds_temp_file%
-cd %ds_target%
+cd /d %ds_target%
 goto :end
 
 :err
