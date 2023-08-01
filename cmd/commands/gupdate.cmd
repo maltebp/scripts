@@ -1,3 +1,3 @@
 @echo off
 
-git rm -r --cached '.' && git add -A
+git rm -r --cached . && git add -A
