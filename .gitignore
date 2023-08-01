@@ -1,2 +1,5 @@
 config.sh
 config.cmd
+cmd/local/
+bash/local/
+__pycache__/
