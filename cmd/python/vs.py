@@ -26,9 +26,9 @@ else:
     if os.path.isdir(path_to_open):
         files_in_dir = os.listdir(path_to_open)
         solution_files = [f for f in files_in_dir if f.endswith('.sln')]
-        print(solution_file)
         expect(len(solution_files) > 0, f"No solution files found in directory '{path_to_open}'")
         solution_file = path_to_open + '\\' + solution_files[0]
+        print("Opening solution: " + solution_file)
     else:
         expect(path_to_open.endswith('.sln'), f"'{path_to_open}' does not seem to be a solution file (not ending with .sln)")
         solution_file = path_to_open
