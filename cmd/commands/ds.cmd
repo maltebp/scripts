@@ -15,11 +15,17 @@ set ds_temp_file=%ds_temp_dir%ds_bat_output.tmp
 if %errorlevel% NEQ 0 goto:err
 set /p ds_target=<%ds_temp_file%
 cd /d %ds_target%
+set failed=0
 goto :end
 
 :err
 type %ds_temp_file%
+set failed=1
 
 :end
 del %ds_temp_file%
-@echo on
+
+:: Why this? Apparently, exit /b 1 does not report the exit code in a way such that && understands it.
+:: Meaning a subsequent && would not respect it failing. So we have to call this as the very last
+:: command in the script for it to propagate correctly.
+cmd /c exit %failed%
