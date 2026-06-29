@@ -3,3 +3,4 @@ config.cmd
 cmd/local/
 bash/local/
 __pycache__/
+logs/

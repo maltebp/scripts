@@ -10,4 +10,6 @@ set s_pdf_reader_path=
 
 set s_path_vs=
 
-set s_path_hourglass="C:\\Users\\maltep\\tools\\HourglassPortable.exe"
+set s_path_hourglass=
+
+set s_kanata_dir_path=
