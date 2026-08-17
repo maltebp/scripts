@@ -2,4 +2,6 @@
 
 call "%~dp0..\config.cmd"
 
-start "" %s_path_hourglass% --theme black-dark --window-state minimized --sound "Quiet beep" %*
+set hourglass_path="%~dp0..\..\external\hourglass\HourglassPortable.exe"
+
+start "" %hourglass_path% --theme black-dark --window-state minimized --sound "Quiet beep" %*
