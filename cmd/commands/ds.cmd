@@ -9,6 +9,11 @@ if not exist %ds_temp_dir%  (
     exit /b 1
 )
 
+if not exist %s_path_python%  (
+    echo Python path '%s_path_python%' is not found
+    exit /b 1
+)
+
 set ds_temp_file=%ds_temp_dir%ds_bat_output.tmp
 %s_path_python% "%~dp0..\python\ds.py" %* >%ds_temp_file% 2>&1
 

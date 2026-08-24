@@ -34,4 +34,4 @@ else:
         solution_file = path_to_open
 
     DETACHED_PROCESS=0x00000008 # Windows only
-    subprocess.Popen([vs_path, solution_file], close_fds=True, creationflags=DETACHED_PROCESS)
+    subprocess.Popen(executable = vs_path, arguments = [solution_file], close_fds=True, creationflags=DETACHED_PROCESS)
