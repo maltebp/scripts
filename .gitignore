@@ -5,3 +5,4 @@ bash/local/
 __pycache__/
 logs/
 external/hourglass/HourglassPortable.config
+local/
