@@ -4,6 +4,9 @@ import sys
 
 from scripts_core import *
 
+def path_is_solution_file(path: str):
+    return path.endswith(".sln") or path.endswith(".slnx")
+
 expect(len(sys.argv) > 1, "Missing Visual Studio path (no arguments passed)")
 
 vs_path = sys.argv[1]
@@ -25,13 +28,15 @@ else:
 
     if os.path.isdir(path_to_open):
         files_in_dir = os.listdir(path_to_open)
-        solution_files = [f for f in files_in_dir if f.endswith('.sln')]
+        
+        solution_files = [f for f in files_in_dir if path_is_solution_file(f)]
+
         expect(len(solution_files) > 0, f"No solution files found in directory '{path_to_open}'")
         solution_file = path_to_open + '\\' + solution_files[0]
         print("Opening solution: " + solution_file)
     else:
-        expect(path_to_open.endswith('.sln'), f"'{path_to_open}' does not seem to be a solution file (not ending with .sln)")
+        expect(path_is_solution_file(path_to_open), f"'{path_to_open}' does not seem to be a solution file (not ending with .sln)")
         solution_file = path_to_open
 
     DETACHED_PROCESS=0x00000008 # Windows only
-    subprocess.Popen(executable = vs_path, arguments = [solution_file], close_fds=True, creationflags=DETACHED_PROCESS)
+    subprocess.Popen(args = [vs_path, solution_file], close_fds=True, creationflags=DETACHED_PROCESS)

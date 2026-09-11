@@ -63,7 +63,7 @@ def root_command(args):
         for filter in filters:
             if len(filter) == 0: continue
 
-            unsupported_regex = ".^$+?{}[]\|()"
+            unsupported_regex = ".^$+?{}[]\\|()"
 
             cleaned_filter = ""
             for c in filter:
