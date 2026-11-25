@@ -1,0 +1,6 @@
+@echo off
+@setlocal
+
+CALL "%~dp0..\config.cmd"
+
+%s_path_python% "%~dp0..\python\rmempty.py" %*
